@@ -19,6 +19,11 @@ import lombok.Data;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
+import java.io.Serializable;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * 排序元素载体
  *
@@ -28,7 +33,9 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 @ToString
-public class OrderItem {
+public class OrderItem implements Serializable {
+
+    private static final long serialVersionUID = 1L;
     /**
      * 需要进行排序的字段
      */
@@ -45,6 +52,14 @@ public class OrderItem {
 
     public static OrderItem desc(String column) {
         return build(column, false);
+    }
+
+    public static List<OrderItem> ascs(String... columns) {
+        return Arrays.stream(columns).map(OrderItem::asc).collect(Collectors.toList());
+    }
+
+    public static List<OrderItem> descs(String... columns) {
+        return Arrays.stream(columns).map(OrderItem::desc).collect(Collectors.toList());
     }
 
     private static OrderItem build(String column, boolean asc) {
